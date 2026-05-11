@@ -2,6 +2,9 @@
 
 AI-powered dashboard to detect recurring subscriptions, monitor renewal reminders, and reduce unnecessary spending.
 
+## Project Goal
+This project helps users identify unnecessary recurring subscriptions, visualize monthly spending, and make smarter financial decisions using AI-generated suggestions.
+
 ## Features
 - Detects recurring subscriptions from expense data
 - Tracks monthly subscription costs
@@ -29,4 +32,5 @@ AI-powered dashboard to detect recurring subscriptions, monitor renewal reminder
 
 ```bash
 pip install -r requirements.txt
-streamlit run app.py
+py -m streamlit run app.py
+```
