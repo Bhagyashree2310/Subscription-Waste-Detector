@@ -221,40 +221,54 @@ if not manual_df.empty:
         ignore_index=True
     )
 
-# ==================================================
-# MAIN DASHBOARD
-# ==================================================
+# ======================================================
+# MAIN LOGIC
+# ======================================================
 
 if not df.empty:
 
+    # CLEAN COLUMN NAMES
     df.columns = df.columns.str.strip()
 
-    df["Description"] = (
-        df["Description"].astype(str)
-    )
+    # REQUIRED COLUMNS CHECK
+    required_columns = [
+        "Description",
+        "Amount"
+    ]
 
-    df["Amount"] = pd.to_numeric(
-        df["Amount"]
-    )
+    missing = [
+        col for col in required_columns
+        if col not in df.columns
+    ]
 
-    # ==============================================
-    # SMART SUBSCRIPTION DETECTION
-    # ==============================================
+    if missing:
 
-    subscriptions = []
+        st.error(
+            f"Missing columns: {missing}"
+        )
 
-    grouped = df.groupby("Description")
+    else:
 
-    for name, group in grouped:
+        # CLEAN DATA
+        df["Description"] = (
+            df["Description"]
+            .astype(str)
+        )
 
-        if len(group) >= 2:
+        df["Amount"] = pd.to_numeric(
+            df["Amount"],
+            errors="coerce"
+        )
 
-            amount_std = group["Amount"].std()
-            avg_amount = group["Amount"].mean()
+        # ==============================================
+        # SMART SUBSCRIPTION DETECTION
+        # ==============================================
 
-            is_same_amount = (
-                amount_std < (avg_amount * 0.1)
-            )
+        subscriptions = []
+
+        grouped = df.groupby("Description")
+
+        for name, group in grouped:
 
             known = [
                 "netflix",
@@ -265,18 +279,18 @@ if not df.empty:
                 "claude",
                 "youtube",
                 "hotstar",
-                "Microsoft 365",
-                "Apple TV",
+                "microsoft 365",
+                "apple tv",
                 "canva",
                 "chatgpt",
                 "snapchat",
                 "prime video",
                 "zee5",
-                "MidJourney",
+                "midjourney",
                 "duolingo",
-                "Xbox game pass",
+                "xbox game pass",
                 "playstation plus",
-                "Perplexity",
+                "perplexity",
                 "reddit"
             ]
 
@@ -285,7 +299,8 @@ if not df.empty:
                 for word in known
             )
 
-            if is_same_amount or is_known:
+            if is_known:
+
                 subscriptions.append(name)
 
     # ==============================================
