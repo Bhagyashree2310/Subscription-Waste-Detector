@@ -138,8 +138,10 @@ st.markdown("""
 # API KEY
 # ==================================================
 
+import os
+
 client = Groq(
-    api_key="PASTE_YOUR_GROQ_API_KEY_HERE"
+    api_key=os.getenv("GROQ_API_KEY")
 )
 
 # ==================================================
